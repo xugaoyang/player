@@ -141,3 +141,18 @@ export function userLikedSongsIDs(uid) {
     },
   })
 }
+
+/**
+ * 获取歌词
+ * @param {string} id 
+ * @returns 
+ */
+export function getLyric(id) {
+  return request({
+    url: '/lyric',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}

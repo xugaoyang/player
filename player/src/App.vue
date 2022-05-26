@@ -1,17 +1,7 @@
-<script setup lang="ts">
-import Header from './components/Header.vue'
-import Container from './components/Container.vue'
-import ControlBtns from './components/ControlBtns.vue'
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="w-screen h-screen">
-    <Header></Header>
-    <Container></Container>
-    <ControlBtns></ControlBtns>
-  </div>
+  <router-view></router-view>
 </template>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
