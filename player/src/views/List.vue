@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { reactive, onMounted } from 'vue'
 import { getHqList, getNewList, getSingerList } from '@/api/list'
+import { PlayCircleOutlined } from '@ant-design/icons-vue'
+
 const hqList = reactive({
   name: '精品歌单',
   list: [],
@@ -27,10 +29,28 @@ onMounted(async () => {
     singerList.list = singerListRes.artists
   }
 })
+/**
+ * 播放热门歌曲
+ */
+const songPlay = (id:string) => {console.log(id)}
+
+/**
+ * 打开精选歌单
+ */
+const openAlbum = () => {
+
+}
+
+/**
+ * 打开歌手热门歌曲50
+ */
+const openSingerSong = () => {
+
+}
 </script>
 
 <template>
-  <div style="padding: 0 50px;">
+  <div style="padding: 0 50px">
     <div>
       <h4 class="text-lg mb-4 mt-4">{{ newList.name }}</h4>
       <a-list
@@ -38,13 +58,14 @@ onMounted(async () => {
         :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4, xxxl: 6 }"
       >
         <template #renderItem="{ item }">
-          <a-list-item>
+          <a-list-item @click="songPlay">
             <a-list-item-meta :description="item.artists[0].name">
               <template #title>
                 <a @click.prevent>{{ item.name }}</a>
               </template>
               <template #avatar>
                 <a-avatar :src="item.album.picUrl" />
+                <PlayCircleOutlined class="icon-play" />
               </template>
             </a-list-item-meta> </a-list-item></template
       ></a-list>
@@ -56,7 +77,7 @@ onMounted(async () => {
         :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 8, xxxl: 12 }"
       >
         <template #renderItem="{ item }">
-          <a-list-item>
+          <a-list-item @click="openAlbum">
             <a-card :bordered="false" :body-style="{ width: '100px', padding: 0 }">
               <template #cover>
                 <img class="cover-img" :src="item.coverImgUrl" alt="" />
@@ -72,7 +93,7 @@ onMounted(async () => {
         :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 8, xxxl: 12 }"
       >
         <template #renderItem="{ item }">
-          <a-list-item>
+          <a-list-item @click="openSingerSong">
             <a-card :bordered="false" :body-style="{ width: '100px', padding: 0 }">
               <template #cover>
                 <img class="cover-img" :src="item.picUrl" alt="" />
@@ -94,7 +115,18 @@ onMounted(async () => {
     height: 50px;
   }
   .ant-list-item-meta-content {
-    width: 60%; 
+    width: 60%;
+  }
+  .ant-list-item-meta-avatar {
+    position: relative;
+  }
+  .icon-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.8)
   }
 }
 .cover-img {
