@@ -6,6 +6,7 @@ import router from '@/router'
 // 注意tailwind在antd上的使用，样式可能会被覆盖
 import './styles/tailwind.css'
 import 'ant-design-vue/dist/antd.css'
+import './styles/common.scss'
 import App from './App.vue'
 
 const app = createApp(App)

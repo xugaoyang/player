@@ -5,6 +5,7 @@ import {
   StepBackwardOutlined,
   StepForwardOutlined,
   CaretRightOutlined,
+  MenuUnfoldOutlined
 } from '@ant-design/icons-vue'
 const progress = ref(30)
 const strokeColor = ref('#000')
@@ -18,6 +19,13 @@ const songInfo = reactive({
 const iconFontSize = reactive({
   fontSize: '26px'
 })
+
+// 播放、暂停、下一首、上一首
+
+// 展开歌词界面
+
+// 播放列表展示
+
 </script>
 
 <template>
@@ -43,8 +51,8 @@ const iconFontSize = reactive({
         <span class="pl-2">{{songInfo.duration}}</span>
       </div>
     </div>
-    <div class="other-control">
-
+    <div class="other-control text-right">
+      <MenuUnfoldOutlined :style="iconFontSize" />
     </div>
   </div>
 </template>
