@@ -442,6 +442,13 @@ dom-scroll-into-view@^2.0.0:
   resolved "https://registry.npmmirror.com/dom-scroll-into-view/-/dom-scroll-into-view-2.0.1.tgz#0decc8522801fd8d3f1c6ba355a74d382c5f989b"
   integrity sha512-bvVTQe1lfaUr1oFzZX80ce9KLDlZ3iU+XGNE/bz9HnGdklTieqsbmsLHe+rT2XWqopvL0PckkYqN7ksmm5pe3w==
 
+dom7@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.npmmirror.com/dom7/-/dom7-4.0.4.tgz#8b68c5d8e5e2ed0fddb1cb93e433bc9060c8f3fb"
+  integrity sha512-DSSgBzQ4rJWQp1u6o+3FVwMNnT5bzQbMb+o31TjYYeRi05uAcpF8koxdfzeoe5ElzPmua7W7N28YJhF7iEKqIw==
+  dependencies:
+    ssr-window "^4.0.0"
+
 electron-to-chromium@^1.4.118:
   version "1.4.124"
   resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.124.tgz#e9015e234d8632920dcdf5480351da9e845ed220"
@@ -999,10 +1006,23 @@ sourcemap-codec@^1.4.8:
   resolved "https://registry.npmmirror.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
+ssr-window@^4.0.0, ssr-window@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npmmirror.com/ssr-window/-/ssr-window-4.0.2.tgz#dc6b3ee37be86ac0e3ddc60030f7b3bc9b8553be"
+  integrity sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==
+
 supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+swiper@^8.2.1:
+  version "8.2.1"
+  resolved "https://registry.npmmirror.com/swiper/-/swiper-8.2.1.tgz#95f72268b68fbf2df614089763b9ff4fef6faf69"
+  integrity sha512-hdS1JRG5WqHLzlRMJGOFJRYAl5wdEoj2AEAQFuDzidsBxsKMdF1mZqnboqKOdDmfaogloAaFcDrNQlJbYbGaWQ==
+  dependencies:
+    dom7 "^4.0.4"
+    ssr-window "^4.0.2"
 
 tailwindcss@^3.0.24:
   version "3.0.24"

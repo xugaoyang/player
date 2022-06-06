@@ -1,8 +1,19 @@
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
-import { getHqList, getNewList, getSingerList } from '@/api/list'
+import { ref, reactive, onMounted } from 'vue'
+import { getHqList, getNewList, getSingerList, getBanner } from '@/api/list'
 import { PlayCircleOutlined } from '@ant-design/icons-vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
 
+import 'swiper/css/bundle'
+
+interface Banner {
+  imageUrl: string
+  targetId: string
+  typeTitle: string
+}
+
+const banners = ref<Banner[] | null>(null)
 const hqList = reactive({
   name: '精品歌单',
   list: [],
@@ -15,7 +26,12 @@ const singerList = reactive({
   name: '歌手分类',
   list: [],
 })
+
 onMounted(async () => {
+  const bannerRes = await getBanner(0)
+  if (bannerRes.code === 200) {
+    banners.value = bannerRes.banners
+  }
   const hqListRes = await getHqList()
   if (hqListRes.code === 200) {
     hqList.list = hqListRes.playlists
@@ -29,28 +45,35 @@ onMounted(async () => {
     singerList.list = singerListRes.artists
   }
 })
+
+const onSwiper = () => {}
+
+const onSlideChange = () => {}
 /**
  * 播放热门歌曲
  */
-const songPlay = (id:string) => {console.log(id)}
+const songPlay = (id: string) => {
+  console.log(id)
+}
 
 /**
  * 打开精选歌单
  */
-const openAlbum = () => {
-
-}
+const openAlbum = () => {}
 
 /**
  * 打开歌手热门歌曲50
  */
-const openSingerSong = () => {
-
-}
+const openSingerSong = () => {}
 </script>
 
 <template>
   <div style="padding: 0 50px">
+    <swiper @swiper="onSwiper" @slideChange="onSlideChange">
+      <swiper-slide v-for="banner in banners" :key="banner.targetId"
+        ><img class="w-full" :src="banner.imageUrl" :alt="banner.typeTitle"
+      /></swiper-slide>
+    </swiper>
     <div>
       <h4 class="text-lg mb-4 mt-4">{{ newList.name }}</h4>
       <a-list
@@ -126,7 +149,7 @@ const openSingerSong = () => {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.8)
+    color: rgba(255, 255, 255, 0.8);
   }
 }
 .cover-img {
@@ -134,5 +157,9 @@ const openSingerSong = () => {
   height: 100px;
   margin-bottom: 10px;
   border-radius: 5px;
+}
+:deep(.swiper) {
+  height: 300px;
+  border-radius: 10px;
 }
 </style>

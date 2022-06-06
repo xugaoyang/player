@@ -1,8 +1,23 @@
 import request from '@/utils/request'
 
 /**
+ * 获取banner
+ * @param {number} type 0:pc 1: android 2: iphone 3:ipad
+ * @returns
+ */
+export function getBanner(type: number) {
+  return request({
+    url: '/banner',
+    method: 'get',
+    params: {
+      type,
+    },
+  })
+}
+
+/**
  * 获取歌单分类
- * @returns 
+ * @returns
  */
 export function getCatList() {
   return request({
@@ -13,7 +28,7 @@ export function getCatList() {
 
 /**
  * 获取热门歌单分类
- * @returns 
+ * @returns
  */
 export function getHotList() {
   return request({
@@ -24,7 +39,7 @@ export function getHotList() {
 
 /**
  * 获取精品歌单
- * @returns 
+ * @returns
  */
 export function getHqList() {
   return request({
@@ -37,13 +52,13 @@ export function getHqList() {
  * @param {number} type 全部：0 华语：7 欧美：96 韩国：16
  * @returns
  */
-export function getNewList(type:number) {
+export function getNewList(type: number) {
   return request({
     url: '/top/song',
     method: 'get',
     params: {
-      type
-    }
+      type,
+    },
   })
 }
 
@@ -51,14 +66,15 @@ export function getNewList(type:number) {
  * 歌手分类列表
  * @param {number} type 全部：-1 男歌手：1 女歌手：2 乐队：3
  * @param {number} area 全部：-1 华语：7 欧美：96 日本：8 韩国：16 其他：0
- * @returns 
+ * @returns
  */
 export function getSingerList(type: number, area: number) {
   return request({
     url: '/artist/list',
     method: 'get',
     params: {
-      type, area
-    }
+      type,
+      area,
+    },
   })
 }

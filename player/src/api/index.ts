@@ -2,40 +2,40 @@ import request from '@/utils/request'
 
 /**
  * @function 手机登录
- * @param {string} phone 
- * @param {string} password 
- * @returns 
+ * @param {string} phone
+ * @param {string} password
+ * @returns
  */
-export function loginByPhone(phone, password) {
+export function loginByPhone(phone: string, password: string) {
   return request({
     url: '/login/cellphone',
     method: 'get',
     params: {
       phone,
-      password
+      password,
     },
   })
 }
 
 /**
  * @function 邮箱登录
- * @param {string} email 
- * @param {string} password 
- * @returns 
+ * @param {string} email
+ * @param {string} password
+ * @returns
  */
-export function loginByEmail(email, password) {
+export function loginByEmail(email: string, password: string) {
   return request({
     url: '/login',
     method: 'get',
     params: {
       email,
-      password
+      password,
     },
   })
 }
 
 /**
- * 
+ *
  * @function 退出登录
  */
 export function logout() {
@@ -51,7 +51,7 @@ export function logout() {
  * - uid : 用户 id
  * @param {number} uid
  */
-export function userDetail(uid) {
+export function userDetail(uid: number) {
   return request({
     url: '/user/detail',
     method: 'get',
@@ -100,7 +100,7 @@ export function userSubcount() {
  * @param {number} params.limit
  * @param {number} params.offset
  */
-export function userPlaylist(params) {
+export function userPlaylist(params: {}) {
   return request({
     url: '/user/playlist',
     method: 'get',
@@ -117,7 +117,7 @@ export function userPlaylist(params) {
  * @param {number} params.uid
  * @param {number} params.type
  */
-export function userPlayHistory(params) {
+export function userPlayHistory(params: {}) {
   return request({
     url: '/user/record',
     method: 'get',
@@ -131,7 +131,7 @@ export function userPlayHistory(params) {
  * - uid: 用户 id
  * @param {number} uid
  */
-export function userLikedSongsIDs(uid) {
+export function userLikedSongsIDs(uid: number) {
   return request({
     url: '/likelist',
     method: 'get',
@@ -144,16 +144,17 @@ export function userLikedSongsIDs(uid) {
 
 /**
  * 获取歌词
- * @param {string} id 
- * @returns 
+ * @param {string} id
+ * @returns
  */
-export function getLyric(id) {
+export function getLyric(id: string) {
   return request({
     url: '/lyric',
     method: 'get',
     params: {
-      id
-    }
+      id,
+    },
   })
 }
+
 
