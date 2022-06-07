@@ -5,7 +5,9 @@ import { PlayCircleOutlined } from '@ant-design/icons-vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 
-import 'swiper/css/bundle'
+import 'swiper/css/effect-coverflow'
+
+import { EffectCoverflow, Autoplay } from 'swiper'
 
 interface Banner {
   imageUrl: string
@@ -69,9 +71,19 @@ const openSingerSong = () => {}
 
 <template>
   <div style="padding: 0 50px">
-    <swiper @swiper="onSwiper" @slideChange="onSlideChange">
+    <swiper
+      :grabCursor="true"
+      :effect="'coverflow'"
+      :slides-per-view="3"
+      :loop="true"
+      :autoplay="true"
+      :coverflow-effect="{ rotate: 50, depth: 100, slideShadows: false }"
+      :modules="[EffectCoverflow, Autoplay]"
+      @swiper="onSwiper"
+      @slideChange="onSlideChange"
+    >
       <swiper-slide v-for="banner in banners" :key="banner.targetId"
-        ><img class="w-full" :src="banner.imageUrl" :alt="banner.typeTitle"
+        ><img :src="banner.imageUrl" :alt="banner.typeTitle"
       /></swiper-slide>
     </swiper>
     <div>
@@ -159,7 +171,11 @@ const openSingerSong = () => {}
   border-radius: 5px;
 }
 :deep(.swiper) {
-  height: 300px;
+  // height: 300px;
+  margin: 20px 0;
   border-radius: 10px;
+  img {
+    border-radius: 10px;
+  }
 }
 </style>
