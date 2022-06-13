@@ -90,7 +90,7 @@ const openSingerSong = () => {}
       <h4 class="text-lg mb-4 mt-4">{{ newList.name }}</h4>
       <a-list
         :data-source="newList.list"
-        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 3, xl: 3, xxl: 4, xxxl: 6 }"
+        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3, xxxl: 4 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="songPlay">
@@ -109,11 +109,11 @@ const openSingerSong = () => {}
       <h4 class="text-lg mb-4 mt-4">{{ hqList.name }}</h4>
       <a-list
         :data-source="hqList.list"
-        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 8, xxxl: 12 }"
+        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 6, xxxl: 8 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="openAlbum">
-            <a-card :bordered="false" :body-style="{ width: '100px', padding: 0 }">
+            <a-card :bordered="false" :body-style="{ width: '150px', padding: 0, margin: '0 auto' }">
               <template #cover>
                 <img class="cover-img" :src="item.coverImgUrl" alt="" />
               </template>
@@ -125,11 +125,11 @@ const openSingerSong = () => {}
       <h4 class="text-lg mb-4 mt-4">{{ singerList.name }}</h4>
       <a-list
         :data-source="singerList.list"
-        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 8, xxxl: 12 }"
+        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 6, xxxl: 8 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="openSingerSong">
-            <a-card :bordered="false" :body-style="{ width: '100px', padding: 0 }">
+            <a-card :bordered="false" :body-style="{ width: '150px', padding: 0, margin: '0 auto' }">
               <template #cover>
                 <img class="cover-img" :src="item.picUrl" alt="" />
               </template>
@@ -165,10 +165,15 @@ const openSingerSong = () => {}
   }
 }
 .cover-img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
   margin-bottom: 10px;
   border-radius: 5px;
+}
+
+:deep(.ant-card-meta-title){
+  text-align: center;
 }
 :deep(.swiper) {
   // height: 300px;
