@@ -11,11 +11,11 @@
 </script>
 
 <template>
-  <div class="header bg-white flex justify-between items-center">
-    <div><img class="logo" src="../../assets/logo.png" alt=""></div>
+  <div class="header bg-white flex justify-between items-center header-shadow">
+    <div><img class="logo" src="../../assets/Y.png" alt=""></div>
     <div>
       <a-dropdown>
-        <a @click.prevent class="flex items-center"><img class="avatar" :src="userProfile.avatarUrl">{{userProfile.nickname}}</a>
+        <a @click.prevent class="flex items-center font-bold text-black"><img class="avatar" :src="userProfile.avatarUrl">{{userProfile.nickname}}</a>
         <template #overlay>
           <a-menu>
             <a-menu-item key="0">
@@ -43,5 +43,8 @@
     height: 40px;
     border-radius: 50%;
   }
+}
+.header-shadow {
+  box-shadow: 0 -2px 2px #eee inset;
 }
 </style>
