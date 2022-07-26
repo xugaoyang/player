@@ -5,6 +5,10 @@ import Layout from '@/components/layout/index.vue'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/main/list'
+  },
+  {
     path: '/login',
     name: 'login',
     meta: { title: 'login' },

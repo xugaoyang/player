@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { getHqList, getNewList, getSingerList, getBanner } from '@/api/list'
-import { PlayCircleOutlined } from '@ant-design/icons-vue'
+import { PlayCircleOutlined, SwapRightOutlined } from '@ant-design/icons-vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 
@@ -36,15 +36,15 @@ onMounted(async () => {
   }
   const hqListRes = await getHqList()
   if (hqListRes.code === 200) {
-    hqList.list = hqListRes.playlists
+    hqList.list = hqListRes.playlists.slice(0, 12)
   }
   const newListRes = await getNewList(0)
   if (newListRes.code === 200) {
-    newList.list = newListRes.data
+    newList.list = newListRes.data.slice(0, 12)
   }
   const singerListRes = await getSingerList(-1, -1)
   if (singerListRes.code === 200) {
-    singerList.list = singerListRes.artists
+    singerList.list = singerListRes.artists.slice(0, 12)
   }
 })
 
@@ -67,6 +67,12 @@ const openAlbum = () => {}
  * 打开歌手热门歌曲50
  */
 const openSingerSong = () => {}
+
+/**
+ * @description 去对应类型的列表界面
+ * @param type new hq singer
+ */
+const getMore = (type: string) => {}
 </script>
 
 <template>
@@ -87,10 +93,13 @@ const openSingerSong = () => {}
       /></swiper-slide>
     </swiper>
     <div>
-      <h4 class="text-lg mb-4 mt-4">{{ newList.name }}</h4>
+      <h4 class="text-lg mb-4 mt-4 font-bold">
+        {{ newList.name
+        }}<span class="float-right flex items-center font-normal" click="getMore('new')">more<swap-right-outlined /></span>
+      </h4>
       <a-list
         :data-source="newList.list"
-        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3, xxxl: 4 }"
+        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2, xxxl: 3 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="songPlay">
@@ -106,14 +115,17 @@ const openSingerSong = () => {}
       ></a-list>
     </div>
     <div>
-      <h4 class="text-lg mb-4 mt-4">{{ hqList.name }}</h4>
+      <h4 class="text-lg mb-4 mt-4 font-bold">
+        {{ hqList.name
+        }}<span class="float-right flex items-center font-normal" click="getMore('hq')">more<swap-right-outlined /></span>
+      </h4>
       <a-list
         :data-source="hqList.list"
-        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 6, xxxl: 8 }"
+        :grid="{ gutter: 200, xs: 2, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4, xxxl: 4 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="openAlbum">
-            <a-card :bordered="false" :body-style="{ width: '150px', padding: 0, margin: '0 auto' }">
+            <a-card :bordered="false" :body-style="{ width: '100%', padding: 0 }">
               <template #cover>
                 <img class="cover-img" :src="item.coverImgUrl" alt="" />
               </template>
@@ -122,14 +134,17 @@ const openSingerSong = () => {}
       ></a-list>
     </div>
     <div>
-      <h4 class="text-lg mb-4 mt-4">{{ singerList.name }}</h4>
+      <h4 class="text-lg mb-4 mt-4 font-bold">
+        {{ singerList.name
+        }}<span class="float-right flex items-center font-normal" click="getMore('singer')">more<swap-right-outlined /></span>
+      </h4>
       <a-list
         :data-source="singerList.list"
-        :grid="{ gutter: 20, xs: 4, sm: 4, md: 4, lg: 4, xl: 4, xxl: 6, xxxl: 8 }"
+        :grid="{ gutter: 200, xs: 2, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4, xxxl: 4 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="openSingerSong">
-            <a-card :bordered="false" :body-style="{ width: '150px', padding: 0, margin: '0 auto' }">
+            <a-card :bordered="false" :body-style="{ width: '100%', padding: 0 }">
               <template #cover>
                 <img class="cover-img" :src="item.picUrl" alt="" />
               </template>
@@ -146,8 +161,9 @@ const openSingerSong = () => {}
   flex: none;
   width: 100%;
   .ant-avatar {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
   }
   .ant-list-item-meta-content {
     width: 60%;
@@ -165,18 +181,16 @@ const openSingerSong = () => {}
   }
 }
 .cover-img {
-  width: 150px;
-  height: 150px;
-  margin: 0 auto;
+  width: 100%;
+  min-height: auto; 
   margin-bottom: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
-:deep(.ant-card-meta-title){
-  text-align: center;
+:deep(.ant-card-meta-title) {
+  text-align: left;
 }
 :deep(.swiper) {
-  // height: 300px;
   margin: 20px 0;
   border-radius: 10px;
   img {
