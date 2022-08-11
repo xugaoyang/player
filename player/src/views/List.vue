@@ -99,7 +99,7 @@ const getMore = (type: string) => {}
       </h4>
       <a-list
         :data-source="newList.list"
-        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2, xxxl: 3 }"
+        :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3, xxxl: 3 }"
       >
         <template #renderItem="{ item }">
           <a-list-item @click="songPlay">
