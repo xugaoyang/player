@@ -2,17 +2,21 @@
 import { ref, reactive, onMounted } from 'vue'
 import { Howl, Howler } from 'howler'
 import songSrc from '@/assets/kill the game.mp3'
-import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons-vue'
+import { CaretRightOutlined, PauseOutlined, createFromIconfontCN } from '@ant-design/icons-vue'
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_3583965_hva988pncgw.js',
+})
 
 const player = reactive({
-  status: false,
+  playing: false,
+  currentTime: 0,
   currentPos: 0,
   duration: 0,
   mute: false,
   volume: 1,
 })
 
-let id: any = null
+let timer: any
 const sound = new Howl({
   src: [songSrc],
   html5: true,
@@ -20,12 +24,17 @@ const sound = new Howl({
     console.log('load')
   },
   onplay: () => {
+    player.playing = true
     console.log('play')
   },
   onend: () => {
     console.log('finished')
+    if (timer) {
+      clearInterval(timer)
+    }
   },
   onpause: () => {
+    player.playing = false
     console.log('pause')
   },
   onstop: () => {
@@ -35,7 +44,12 @@ const sound = new Howl({
 
 const play = () => {
   sound.play()
+  player.duration = sound.duration()
   // 定时器打开跑进度
+  timer = setInterval(() => {
+    player.currentTime = Math.round(sound.seek())
+    player.currentPos = Math.round((sound.seek() / sound.duration()) * 100)
+  }, 1000)
 }
 const pause = () => {
   sound.pause()
@@ -52,15 +66,9 @@ const changeMute = () => {
   player.mute = !player.mute
   sound.mute(player.mute)
 }
-// get duration
-const currentTime = () => {
-  console.log(sound)
-  player.currentPos = Math.round(sound.seek())
-  player.duration = sound.duration()
-}
 
 // 秒转换分秒
-const secToMin = (second:number) => {
+const secToMin = (second: number) => {
   let minute: number = 0
   if (second < 60) {
     return second < 10 ? `0${minute}:0${second}` : `0${minute}:${second}`
@@ -76,30 +84,40 @@ const secToMin = (second:number) => {
 
 <template>
   <div>howler测试</div>
-  <CaretRightOutlined @click="play" />
-  <PauseOutlined @click="pause" />
-  <div>
-    <a-button type="primary" @click="changeMute">静音状态</a-button>
-    <span>{{ player.mute }}</span>
-  </div>
-  <div class="pt-5">
-    <a-button type="primary" @click="changeVolume">音量</a-button>
-    <div style="width: 100px">
+  <div class="flex justify-start items-center">
+    <div><CaretRightOutlined @click="play" v-if="!player.playing" /> <PauseOutlined @click="pause" v-else /></div>
+    <div class="pr-5">
+      <icon-font v-if="player.mute" type="icon-sound-mute" @click="changeMute" />
+      <icon-font v-else type="icon-sound-filling" @click="changeMute" />
+    </div>
+    <div class="pr-5" style="width: 100px">
       <a-slider
         v-model:value="player.volume"
         :min="0"
         :max="1"
         :step="0.1"
         @change="changeVolume"
+        :tooltip-visible="false"
       />
     </div>
-
-    <span>{{ player.volume }}</span>
-  </div>
-
-  <div class="pt-5">
-    <a-button type="primary" @click="currentTime">时间</a-button>{{secToMin(player.currentPos)}} -- {{ secToMin(player.duration) }}
+    <div>
+      {{ secToMin(player.currentTime)
+      }}<a-progress
+        :stroke-color="{
+          from: '#108ee9',
+          to: '#87d068',
+        }"
+        status="active"
+        :percent="player.currentPos"
+        :show-info="false"
+        style="width: 100px"
+      />{{ secToMin(player.duration) }}
+    </div>
   </div>
 </template>
 
-<style></style>
+<style lang="scss" scoped>
+:deep(.anticon){
+  font-size: 16px;
+}
+</style>
