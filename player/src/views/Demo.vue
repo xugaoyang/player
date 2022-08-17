@@ -62,14 +62,15 @@ const play = (src: string) => {
     html5: true,
     onload: () => {
       console.log('load', sound.duration())
-      player.duration = Math.round(sound.duration())
+      player.duration = Math.floor(sound.duration())
     },
     onplay: () => {
       player.playing = true
       console.log('play')
       // 定时器打开跑进度
       timer = setInterval(() => {
-        player.currentTime = Math.round(sound.seek())
+        player.currentTime = Math.floor(sound.seek())
+        console.log('当前时间戳', sound.seek())
         player.currentPos = Math.round((sound.seek() / sound.duration()) * 100)
       }, 1000)
     },
@@ -160,8 +161,8 @@ const secToMin = (second: number) => {
   if (second < 60) {
     return second < 10 ? `0${minute}:0${second}` : `0${minute}:${second}`
   } else {
-    minute = Math.round(second / 60)
-    second = Math.round(second % 60)
+    minute = Math.floor(second / 60)
+    second = Math.floor(second % 60)
     const m = minute < 10 ? `0${minute}` : minute
     const s = second < 10 ? `0${second}` : second
     return `${m}:${s}`
@@ -170,7 +171,7 @@ const secToMin = (second: number) => {
 </script>
 
 <template>
-  <div>howler测试</div>
+  <div class="font-bold text-center">howler测试</div>
   <a-list item-layout="horizontal" :data-source="player.list">
     <template #renderItem="{ item }">
       <a-list-item @click="clickSong(item)">
@@ -185,59 +186,85 @@ const secToMin = (second: number) => {
       </a-list-item>
     </template>
   </a-list>
-  <div class="flex justify-start items-center">
-    <div>
-      <a-tooltip v-if="player.loopMode === 'single'">
-        <template #title>单曲循环</template>
-        <icon-font type="icon-single-circle" @click="changeLoop" />
-      </a-tooltip>
-      <a-tooltip v-else-if="player.loopMode === 'list'">
-        <template #title>列表循环</template>
-        <icon-font type="icon-list-circle" @click="changeLoop" />
-      </a-tooltip>
-      <a-tooltip v-else>
-        <template #title>关闭循环</template>
-        <icon-font type="icon-close-circle" @click="changeLoop" />
-      </a-tooltip>
+  <div class="control-bar flex justify-center items-center pb-2">
+    <div class="control-bar-c flex">
+      <div class="pr-5 loop-button">
+        <a-tooltip v-if="player.loopMode === 'single'">
+          <template #title>单曲循环</template>
+          <icon-font type="icon-single-circle" @click="changeLoop" />
+        </a-tooltip>
+        <a-tooltip v-else-if="player.loopMode === 'list'">
+          <template #title>列表循环</template>
+          <icon-font type="icon-list-circle" @click="changeLoop" />
+        </a-tooltip>
+        <a-tooltip v-else>
+          <template #title>关闭循环</template>
+          <icon-font type="icon-close-circle" @click="changeLoop" />
+        </a-tooltip>
+      </div>
+      <div class="control-button">
+        <StepBackwardOutlined @click="toPrev" class="pr-5" />
+        <CaretRightOutlined @click="pauseOrPlay" v-if="!player.playing" class="pr-5" />
+        <PauseOutlined @click="pauseOrPlay" v-else class="pr-5" />
+        <StepForwardOutlined @click="toNext" />
+      </div>
     </div>
-    <div>
-      <StepBackwardOutlined @click="toPrev" />
-      <CaretRightOutlined @click="pauseOrPlay" v-if="!player.playing" />
-      <PauseOutlined @click="pauseOrPlay" v-else />
-      <StepForwardOutlined @click="toNext" />
+
+    <div class="control-bar-r">
+      <a-popover>
+        <template #content>
+          <div style="height: 50px">
+            <a-slider
+              v-model:value="player.volume"
+              :min="0"
+              :max="1"
+              :step="0.1"
+              @change="changeVolume"
+              :tooltip-visible="false"
+              vertical
+            />
+          </div>
+        </template>
+        <icon-font v-if="player.volume === 0" type="icon-sound-mute" />
+        <icon-font v-else type="icon-sound-filling" />
+      </a-popover>
     </div>
-    <div class="pr-5">
-      <icon-font v-if="player.mute" type="icon-sound-mute" @click="changeMute" />
-      <icon-font v-else type="icon-sound-filling" @click="changeMute" />
-    </div>
-    <div class="pr-5" style="width: 100px">
-      <a-slider
-        v-model:value="player.volume"
-        :min="0"
-        :max="1"
-        :step="0.1"
-        @change="changeVolume"
-        :tooltip-visible="false"
-      />
-    </div>
-    <div>
-      {{ secToMin(player.currentTime)
-      }}<a-progress
-        :stroke-color="{
-          from: '#108ee9',
-          to: '#87d068',
-        }"
-        status="active"
-        :percent="player.currentPos"
-        :show-info="false"
-        style="width: 100px"
-      />{{ secToMin(player.duration) }}
-    </div>
+  </div>
+  <div class="duration-bar flex justify-center items-center">
+    <span class="pr-1">{{ secToMin(player.currentTime) }}</span>
+    <a-progress
+      :stroke-color="{
+        from: '#108ee9',
+        to: '#87d068',
+      }"
+      status="active"
+      :percent="player.currentPos"
+      :show-info="false"
+      style="width: 100px"
+    />
+    <span class="pl-1">{{ secToMin(player.duration) }}</span>
   </div>
 </template>
 
 <style lang="scss" scoped>
 :deep(.anticon) {
-  font-size: 16px;
+  font-size: 20px;
+}
+.control-bar {
+  position: relative;
+  .control-bar-r {
+    position: absolute;
+    right: 20px;
+    top: 0;
+  }
+}
+</style>
+
+<style lang="scss">
+.ant-popover-inner-content {
+  padding: 5px !important;
+}
+.ant-slider-vertical {
+  margin: 0 !important;
 }
 </style>

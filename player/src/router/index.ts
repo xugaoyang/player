@@ -15,6 +15,12 @@ const routes = [
     component: () => import('@/views/Login.vue'),
   },
   {
+    path: '/howler-demo',
+    name: 'howler-demo',
+    meta: {title: 'howler-demo'},
+    component: () => import('@/views/Demo.vue')
+  },
+  {
     path: '/main',
     component: Layout,
     children: [
@@ -29,13 +35,7 @@ const routes = [
         name: 'user',
         meta: {title: 'user'},
         component: () => import('@/views/User.vue')
-      },
-      {
-        path: 'demo',
-        name: 'demo',
-        meta: {title: 'howler-demo'},
-        component: () => import('@/views/Demo.vue')
-      },
+      }
     ]
   }
 ]
