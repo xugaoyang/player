@@ -12,7 +12,7 @@ import {
   createFromIconfontCN,
 } from '@ant-design/icons-vue'
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3583965_6y2o1lofk4m.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js',
 })
 
 const player = reactive({
@@ -155,6 +155,9 @@ const changeLoop = () => {
   player.loopMode = idx + 1 === loopArr.length ? loopArr[0] : loopArr[idx + 1]
 }
 
+const showLyric = () => {
+  console.log('show me lyric')
+}
 // 秒转换分秒
 const secToMin = (second: number) => {
   let minute: number = 0
@@ -187,27 +190,28 @@ const secToMin = (second: number) => {
     </template>
   </a-list>
   <div class="control-bar flex justify-center items-center pb-2">
-    <div class="control-bar-c flex">
-      <div class="pr-5 loop-button">
-        <a-tooltip v-if="player.loopMode === 'single'">
-          <template #title>单曲循环</template>
-          <icon-font type="icon-single-circle" @click="changeLoop" />
-        </a-tooltip>
-        <a-tooltip v-else-if="player.loopMode === 'list'">
-          <template #title>列表循环</template>
-          <icon-font type="icon-list-circle" @click="changeLoop" />
-        </a-tooltip>
-        <a-tooltip v-else>
-          <template #title>关闭循环</template>
-          <icon-font type="icon-close-circle" @click="changeLoop" />
-        </a-tooltip>
-      </div>
-      <div class="control-button">
-        <StepBackwardOutlined @click="toPrev" class="pr-5" />
-        <CaretRightOutlined @click="pauseOrPlay" v-if="!player.playing" class="pr-5" />
-        <PauseOutlined @click="pauseOrPlay" v-else class="pr-5" />
-        <StepForwardOutlined @click="toNext" />
-      </div>
+    <div class="control-button text-center">
+      <!-- 循环按钮 -->
+      <a-tooltip v-if="player.loopMode === 'single'" class="pr-5">
+        <template #title>单曲循环</template>
+        <icon-font type="icon-single-circle" @click="changeLoop" />
+      </a-tooltip>
+      <a-tooltip v-else-if="player.loopMode === 'list'" class="pr-5">
+        <template #title>列表循环</template>
+        <icon-font type="icon-list-circle" @click="changeLoop" />
+      </a-tooltip>
+      <a-tooltip v-else class="pr-5">
+        <template #title>关闭循环</template>
+        <icon-font type="icon-close-circle" @click="changeLoop" />
+      </a-tooltip>
+      <!-- 控制按钮 -->
+      <StepBackwardOutlined @click="toPrev" class="pr-5" />
+      <CaretRightOutlined @click="pauseOrPlay" v-if="!player.playing" class="pr-5" />
+      <PauseOutlined @click="pauseOrPlay" v-else class="pr-5" />
+      <StepForwardOutlined @click="toNext" />
+
+      <!-- 歌词显示按钮 -->
+      <icon-font class="icon-lyric pl-5" type="icon-lyric" @click="showLyric" />
     </div>
 
     <div class="control-bar-r">
@@ -240,7 +244,7 @@ const secToMin = (second: number) => {
       status="active"
       :percent="player.currentPos"
       :show-info="false"
-      style="width: 100px"
+      style="width: 200px"
     />
     <span class="pl-1">{{ secToMin(player.duration) }}</span>
   </div>
@@ -249,6 +253,10 @@ const secToMin = (second: number) => {
 <style lang="scss" scoped>
 :deep(.anticon) {
   font-size: 20px;
+  &.icon-lyric {
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 .control-bar {
   position: relative;
