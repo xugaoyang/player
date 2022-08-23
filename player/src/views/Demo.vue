@@ -4,6 +4,8 @@ import { Howl, Howler } from 'howler'
 import song0 from '@/assets/songs/kill the game.mp3'
 import song1 from '@/assets/songs/少数派报告.mp3'
 import song2 from '@/assets/songs/What Do You Mean.mp3'
+import songs from '@/assets/songs/lyrics'
+import { parseLyric } from '@/utils/lyrics'
 import {
   CaretRightOutlined,
   StepBackwardOutlined,
@@ -22,6 +24,7 @@ const player = reactive({
     name: '',
     singer: '',
     src: '',
+    lyric: ''
   }, // 当前歌曲
   currentIndex: 0, // 当前序号
   currentTime: 0, // 当前歌曲进度，秒
@@ -36,18 +39,21 @@ const player = reactive({
       name: 'kill the game',
       singer: 'Round_2、贰万、早安',
       src: song0,
+      lyric: songs[0].lyric
     },
     {
       id: '2',
       name: '少数派报告',
       singer: 'Tizzy T、VaVa毛衍七、Jony J、布瑞吉Bridge、黄旭',
       src: song1,
+      lyric: songs[1].lyric
     },
     {
       id: '3',
       name: 'What Do You Mean',
       singer: 'Justin Bieber',
       src: song2,
+      lyric: songs[2].lyric
     },
   ],
 })
@@ -62,16 +68,16 @@ const play = (src: string) => {
     html5: true,
     onload: () => {
       console.log('load', sound.duration())
-      player.duration = Math.floor(sound.duration())
+      player.duration = sound.duration()
     },
     onplay: () => {
       player.playing = true
-      console.log('play')
+      console.log('play',player.currentSong.lyric, parseLyric(player.currentSong.lyric))
       // 定时器打开跑进度
       timer = setInterval(() => {
-        player.currentTime = Math.floor(sound.seek())
+        player.currentTime = sound.seek()
         console.log('当前时间戳', sound.seek())
-        player.currentPos = Math.round((sound.seek() / sound.duration()) * 100)
+        player.currentPos = (sound.seek() / sound.duration()) * 100
       }, 1000)
     },
     onend: () => {
@@ -104,7 +110,7 @@ const callbackAfterFinish = () => {
   }
   // 单曲循环
   if (player.loopMode === 'single') {
-    sound.loop(true)
+    play(player.currentSong.src)
   }
 }
 
@@ -160,6 +166,7 @@ const showLyric = () => {
 }
 // 秒转换分秒
 const secToMin = (second: number) => {
+  second = Math.floor(second)
   let minute: number = 0
   if (second < 60) {
     return second < 10 ? `0${minute}:0${second}` : `0${minute}:${second}`
@@ -247,6 +254,10 @@ const secToMin = (second: number) => {
       style="width: 200px"
     />
     <span class="pl-1">{{ secToMin(player.duration) }}</span>
+  </div>
+
+  <div class="lyric-panel">
+    
   </div>
 </template>
 
