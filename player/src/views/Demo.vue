@@ -84,6 +84,9 @@ const play = (src: string) => {
       player.currentLyric = parseLyric(player.currentSong.lyric).filter(
         (l) => !/^作(词|曲)\s*(:|：)\s*无$/.exec(l.content)
       )
+
+      // 从第几行开始滚动，上下都能看
+      const fromIndex = 5
       // 定时器打开跑进度
       timer = setInterval(() => {
         player.currentTime = sound.seek()
@@ -98,8 +101,10 @@ const play = (src: string) => {
           ) {
             player.currentLyricIndex = index
             // 滚动歌词
-            // document.querySelector('.lyric-panel')!.scrollTop = index * 36
-            document.querySelector('.lyric-panel')!.scrollTo({top: index * 36,behavior: 'smooth'})
+            // document.querySelector('.lyric-panel')!.scrollTop = (index - fromIndex) * 36
+            if(index >= fromIndex) {
+              document.querySelector('.lyric-panel')!.scrollTo({top: (index - fromIndex) * 36,behavior: 'smooth'})
+            }
           }
         })
       }, 1000)
@@ -282,7 +287,7 @@ onMounted(() => {})
     <span class="pl-1">{{ secToMin(player.duration) }}</span>
   </div>
 
-  <div class="lyric-panel">
+  <div class="lyric-panel mt-5">
     <div class="lyric" v-if="player.currentLyric.length">
       <p
         class="text-center lyric-text"
@@ -315,7 +320,8 @@ onMounted(() => {})
 }
 .lyric-panel {
   height: 400px;
-  overflow-y: scroll;
+  overflow: hidden;
+  // overflow-y: scroll;
   .lyric {
   }
   .lyric-text {
