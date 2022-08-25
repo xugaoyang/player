@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { Howl, Howler } from 'howler'
 import song0 from '@/assets/songs/kill the game.mp3'
 import song1 from '@/assets/songs/少数派报告.mp3'
@@ -17,6 +17,12 @@ const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js',
 })
 
+interface Lyric {
+  content: string
+  time: number
+  rawTime: string
+}
+
 const player = reactive({
   playing: false, // 是否播放
   currentSong: {
@@ -24,11 +30,13 @@ const player = reactive({
     name: '',
     singer: '',
     src: '',
-    lyric: ''
+    lyric: '',
   }, // 当前歌曲
   currentIndex: 0, // 当前序号
   currentTime: 0, // 当前歌曲进度，秒
   currentPos: 0, // 当前歌曲进度，百分比
+  currentLyric: [], // 当前歌词数组列表
+  currentLyricIndex: 0, // 当前歌词行数
   duration: 0, // 当前歌曲时长
   mute: false, // 是否静音
   volume: 1, // 音量
@@ -39,21 +47,21 @@ const player = reactive({
       name: 'kill the game',
       singer: 'Round_2、贰万、早安',
       src: song0,
-      lyric: songs[0].lyric
+      lyric: songs[0].lyric,
     },
     {
       id: '2',
       name: '少数派报告',
       singer: 'Tizzy T、VaVa毛衍七、Jony J、布瑞吉Bridge、黄旭',
       src: song1,
-      lyric: songs[1].lyric
+      lyric: songs[1].lyric,
     },
     {
       id: '3',
       name: 'What Do You Mean',
       singer: 'Justin Bieber',
       src: song2,
-      lyric: songs[2].lyric
+      lyric: songs[2].lyric,
     },
   ],
 })
@@ -72,12 +80,28 @@ const play = (src: string) => {
     },
     onplay: () => {
       player.playing = true
-      console.log('play',player.currentSong.lyric, parseLyric(player.currentSong.lyric))
+      console.log('play', player.currentSong.lyric, parseLyric(player.currentSong.lyric))
+      player.currentLyric = parseLyric(player.currentSong.lyric).filter(
+        (l) => !/^作(词|曲)\s*(:|：)\s*无$/.exec(l.content)
+      )
       // 定时器打开跑进度
       timer = setInterval(() => {
         player.currentTime = sound.seek()
         console.log('当前时间戳', sound.seek())
         player.currentPos = (sound.seek() / sound.duration()) * 100
+        // 歌词匹配
+        player.currentLyric.forEach((item, index) => {
+          if (
+            player.currentTime > item.time &&
+            (index + 1 <= player.currentLyric.length) &&
+            player.currentTime < player.currentLyric[index + 1].time
+          ) {
+            player.currentLyricIndex = index
+            // 滚动歌词
+            // document.querySelector('.lyric-panel')!.scrollTop = index * 36
+            document.querySelector('.lyric-panel')!.scrollTo({top: index * 36,behavior: 'smooth'})
+          }
+        })
       }, 1000)
     },
     onend: () => {
@@ -102,6 +126,7 @@ const callbackAfterFinish = () => {
     clearInterval(timer)
     player.currentTime = 0
     player.currentPos = 0
+    document.querySelector('.lyric-panel')!.scrollTop = 0
   }
   console.log(player.loopMode)
   // 列表循环，自动播放下一首
@@ -178,6 +203,7 @@ const secToMin = (second: number) => {
     return `${m}:${s}`
   }
 }
+onMounted(() => {})
 </script>
 
 <template>
@@ -257,7 +283,17 @@ const secToMin = (second: number) => {
   </div>
 
   <div class="lyric-panel">
-    
+    <div class="lyric" v-if="player.currentLyric.length">
+      <p
+        class="text-center lyric-text"
+        :class="{
+          highlight: player.currentLyricIndex === index,
+        }"
+        v-for="(item, index) in player.currentLyric"
+      >
+        {{ item.content }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -275,6 +311,18 @@ const secToMin = (second: number) => {
     position: absolute;
     right: 20px;
     top: 0;
+  }
+}
+.lyric-panel {
+  height: 400px;
+  overflow-y: scroll;
+  .lyric {
+  }
+  .lyric-text {
+    color: #666;
+    &.highlight {
+      color: lightcoral;
+    }
   }
 }
 </style>
