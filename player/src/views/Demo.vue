@@ -37,6 +37,7 @@ const player = reactive({
   currentPos: 0, // 当前歌曲进度，百分比
   currentLyric: [], // 当前歌词数组列表
   currentLyricIndex: 0, // 当前歌词行数
+  isLyricShow: false, // 是否显示歌词面板
   duration: 0, // 当前歌曲时长
   mute: false, // 是否静音
   volume: 1, // 音量
@@ -85,7 +86,7 @@ const play = (src: string) => {
         (l) => !/^作(词|曲)\s*(:|：)\s*无$/.exec(l.content)
       )
 
-      // 从第几行开始滚动，上下都能看
+      // 从第几行开始才进行滚动，上下都能看内容
       const fromIndex = 5
       // 定时器打开跑进度
       timer = setInterval(() => {
@@ -93,20 +94,24 @@ const play = (src: string) => {
         console.log('当前时间戳', sound.seek())
         player.currentPos = (sound.seek() / sound.duration()) * 100
         // 歌词匹配
-        player.currentLyric.forEach((item, index) => {
-          if (
-            player.currentTime > item.time &&
-            (index + 1 <= player.currentLyric.length) &&
-            player.currentTime < player.currentLyric[index + 1].time
-          ) {
-            player.currentLyricIndex = index
-            // 滚动歌词
-            // document.querySelector('.lyric-panel')!.scrollTop = (index - fromIndex) * 36
-            if(index >= fromIndex) {
-              document.querySelector('.lyric-panel')!.scrollTo({top: (index - fromIndex) * 36,behavior: 'smooth'})
+        if (player.isLyricShow) {
+          player.currentLyric.forEach((item, index) => {
+            if (
+              player.currentTime > item.time &&
+              index + 1 <= player.currentLyric.length - 1 &&
+              player.currentTime < player.currentLyric[index + 1].time
+            ) {
+              player.currentLyricIndex = index
+              // 滚动歌词
+              // document.querySelector('.lyric-panel')!.scrollTop = (index - fromIndex) * 36
+              if (index >= fromIndex) {
+                document
+                  .querySelector('.lyric-panel')!
+                  .scrollTo({ top: (index - fromIndex) * 36, behavior: 'smooth' })
+              }
             }
-          }
-        })
+          })
+        }
       }, 1000)
     },
     onend: () => {
@@ -193,6 +198,7 @@ const changeLoop = () => {
 
 const showLyric = () => {
   console.log('show me lyric')
+  player.isLyricShow = !player.isLyricShow
 }
 // 秒转换分秒
 const secToMin = (second: number) => {
@@ -287,7 +293,7 @@ onMounted(() => {})
     <span class="pl-1">{{ secToMin(player.duration) }}</span>
   </div>
 
-  <div class="lyric-panel mt-5">
+  <div class="lyric-panel mt-5" v-if="player.isLyricShow">
     <div class="lyric" v-if="player.currentLyric.length">
       <p
         class="text-center lyric-text"
