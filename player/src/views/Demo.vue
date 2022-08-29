@@ -136,7 +136,11 @@ const callbackAfterFinish = () => {
     clearInterval(timer)
     player.currentTime = 0
     player.currentPos = 0
-    document.querySelector('.lyric-panel')!.scrollTop = 0
+
+    // 歌词回滚初始状态
+    if (player.isLyricShow) {
+      document.querySelector('.lyric-panel')!.scrollTop = 0
+    }
   }
   console.log(player.loopMode)
   // 列表循环，自动播放下一首
