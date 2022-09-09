@@ -78,8 +78,11 @@ const play = (src: string) => {
     onload: () => {
       console.log('load', sound.duration())
       player.duration = sound.duration()
+      
+      init()
     },
     onplay: () => {
+      
       player.playing = true
       console.log('play', player.currentSong.lyric, parseLyric(player.currentSong.lyric))
       player.currentLyric = parseLyric(player.currentSong.lyric).filter(
@@ -130,18 +133,23 @@ const play = (src: string) => {
   sound.play()
 }
 
-// 当前播放完成的后续动作
-const callbackAfterFinish = () => {
+// 播放器相关初始化重置
+const init = () => {
   if (timer) {
     clearInterval(timer)
     player.currentTime = 0
     player.currentPos = 0
-
+    player.currentLyricIndex = 0
     // 歌词回滚初始状态
     if (player.isLyricShow) {
       document.querySelector('.lyric-panel')!.scrollTop = 0
     }
   }
+}
+
+// 当前播放完成的后续动作
+const callbackAfterFinish = () => {
+  // init()
   console.log(player.loopMode)
   // 列表循环，自动播放下一首
   if (player.loopMode === 'list') {
@@ -164,7 +172,8 @@ const toPrev = () => {
   const currentIndex = player.list.findIndex((item, index) => index === player.currentIndex)
   player.currentIndex = currentIndex - 1 < 0 ? player.list.length - 1 : currentIndex - 1
   const prevSong = player.list[player.currentIndex]
-  play(prevSong.src)
+  player.currentSong = prevSong
+  play(player.currentSong.src)
 }
 
 const toNext = () => {
@@ -172,7 +181,8 @@ const toNext = () => {
   const currentIndex = player.list.findIndex((item, index) => index === player.currentIndex)
   player.currentIndex = currentIndex + 1 === player.list.length ? 0 : currentIndex + 1
   const nextSong = player.list[player.currentIndex]
-  play(nextSong.src)
+  player.currentSong = nextSong
+  play(player.currentSong.src)
 }
 
 const pauseOrPlay = () => {
