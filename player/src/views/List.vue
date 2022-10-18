@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, toRaw} from 'vue'
-import { getHqList, getNewList, getSingerList, getBanner,getSongUrl } from '@/api/list'
+import { getHqList, getNewList, getSingerList, getBanner } from '@/api/list'
+import { getSongUrl } from '@/api/info'
 import { PlayCircleOutlined, SwapRightOutlined } from '@ant-design/icons-vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
@@ -58,6 +59,7 @@ const songPlay = async (song: any) => {
   const data = toRaw(song)
   const res = await getSongUrlById(data.id)
   store.player.playAudioSource(res)
+  // TODO:添加进当前播放列表
 }
 
 /**

@@ -80,14 +80,31 @@ export function getSingerList(type: number, area: number) {
 }
 
 /**
- * 获取歌曲url
+ * 获取歌手热门50首歌曲
+ * @param {string} id 歌手id
+ * @returns 
  */
-export function getSongUrl(id: string) {
+export function getSingerTop50(id: string) {
   return request({
-    url: '/song/url',
+    url: '/artist/top/song',
     method: 'get',
     params: {
       id
-    }
+    },
+  })
+}
+
+/**
+ * 歌手全部歌曲
+ * @param {string} id 歌手id
+ * @returns 
+ */
+export function getSingerAll(id: string) {
+  return request({
+    url: '/artist/songs',
+    method: 'get',
+    params: {
+      id
+    },
   })
 }
