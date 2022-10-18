@@ -1,17 +1,16 @@
 import { defineStore } from 'pinia'
+import Player from '@/utils/player'
 
+let howler_player = new Player()
+console.log(howler_player)
 export const useMainStore = defineStore('mainStore', {
   persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: 'mainStore',
-        storage: localStorage,
-      },
-    ],
+    key: 'mainStore',
+    storage: localStorage,
   },
   state: () => {
     return {
+      player: howler_player,
       account: {},
       profile: {},
       token: '',

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { getHqList, getNewList, getSingerList, getBanner } from '@/api/list'
+import { ref, reactive, onMounted, toRaw} from 'vue'
+import { getHqList, getNewList, getSingerList, getBanner,getSongUrl } from '@/api/list'
 import { PlayCircleOutlined, SwapRightOutlined } from '@ant-design/icons-vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
-
 import 'swiper/css/effect-coverflow'
-
 import { EffectCoverflow, Autoplay } from 'swiper'
+import { useMainStore } from '@/store'
 
 interface Banner {
   imageUrl: string
@@ -15,6 +14,7 @@ interface Banner {
   typeTitle: string
 }
 
+const store = useMainStore()
 const banners = ref<Banner[] | null>(null)
 const hqList = reactive({
   name: '精品歌单',
@@ -54,8 +54,10 @@ const onSlideChange = () => {}
 /**
  * 播放热门歌曲
  */
-const songPlay = (id: string) => {
-  console.log(id)
+const songPlay = async (song: any) => {
+  const data = toRaw(song)
+  const res = await getSongUrlById(data.id)
+  store.player.playAudioSource(res)
 }
 
 /**
@@ -73,6 +75,14 @@ const openSingerSong = () => {}
  * @param type new hq singer
  */
 const getMore = (type: string) => {}
+
+const getSongUrlById = async (id: string) => {
+  const res = await getSongUrl(id)
+  if (res.code === 200) {
+    return res.data[0].url
+  }
+  return ''
+}
 </script>
 
 <template>
@@ -102,7 +112,7 @@ const getMore = (type: string) => {}
         :grid="{ gutter: 20, xs: 2, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3, xxxl: 3 }"
       >
         <template #renderItem="{ item }">
-          <a-list-item @click="songPlay">
+          <a-list-item @click="songPlay(item)">
             <a-list-item-meta :description="item.artists[0].name">
               <template #title>
                 <a @click.prevent>{{ item.name }}</a>

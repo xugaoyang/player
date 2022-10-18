@@ -24,7 +24,7 @@ interface Lyric {
 }
 
 const player = reactive({
-  playing: false, // 是否播放
+  isPlaying: false, // 是否播放
   currentSong: {
     id: '',
     name: '',
@@ -78,12 +78,11 @@ const play = (src: string) => {
     onload: () => {
       console.log('load', sound.duration())
       player.duration = sound.duration()
-      
+
       init()
     },
     onplay: () => {
-      
-      player.playing = true
+      player.isPlaying = true
       console.log('play', player.currentSong.lyric, parseLyric(player.currentSong.lyric))
       player.currentLyric = parseLyric(player.currentSong.lyric).filter(
         (l) => !/^作(词|曲)\s*(:|：)\s*无$/.exec(l.content)
@@ -123,7 +122,7 @@ const play = (src: string) => {
       callbackAfterFinish()
     },
     onpause: () => {
-      player.playing = false
+      player.isPlaying = false
       console.log('pause')
     },
     onstop: () => {
@@ -220,13 +219,12 @@ const secToMin = (second: number) => {
   let minute: number = 0
   if (second < 60) {
     return second < 10 ? `0${minute}:0${second}` : `0${minute}:${second}`
-  } else {
-    minute = Math.floor(second / 60)
-    second = Math.floor(second % 60)
-    const m = minute < 10 ? `0${minute}` : minute
-    const s = second < 10 ? `0${second}` : second
-    return `${m}:${s}`
   }
+  minute = Math.floor(second / 60)
+  second = Math.floor(second % 60)
+  const m = minute < 10 ? `0${minute}` : minute
+  const s = second < 10 ? `0${second}` : second
+  return `${m}:${s}`
 }
 onMounted(() => {})
 </script>
@@ -264,7 +262,7 @@ onMounted(() => {})
       </a-tooltip>
       <!-- 控制按钮 -->
       <StepBackwardOutlined @click="toPrev" class="pr-5" />
-      <CaretRightOutlined @click="pauseOrPlay" v-if="!player.playing" class="pr-5" />
+      <CaretRightOutlined @click="pauseOrPlay" v-if="!player.isPlaying" class="pr-5" />
       <PauseOutlined @click="pauseOrPlay" v-else class="pr-5" />
       <StepForwardOutlined @click="toNext" />
 

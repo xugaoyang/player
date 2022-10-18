@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import piniaPluginPersist from 'pinia-plugin-persist'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import Antd from 'ant-design-vue'
 import router from '@/router'
 // 注意tailwind在antd上的使用，样式可能会被覆盖
@@ -11,7 +11,7 @@ import App from './App.vue'
 
 const app = createApp(App)
 const pinia = createPinia()
-pinia.use(piniaPluginPersist)
+pinia.use(piniaPluginPersistedstate)
 app.use(Antd)
 app.use(pinia)
 app.use(router)

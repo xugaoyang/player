@@ -78,3 +78,16 @@ export function getSingerList(type: number, area: number) {
     },
   })
 }
+
+/**
+ * 获取歌曲url
+ */
+export function getSongUrl(id: string) {
+  return request({
+    url: '/song/url',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
