@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:style": "stylelint \"./**/*.{css,less,vue,html}\" --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
@@ -18,7 +20,6 @@
     "path": "^0.12.7",
     "pinia": "^2.0.13",
     "pinia-plugin-persistedstate": "^2.3.0",
-    "postcss": "^8.4.12",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "swiper": "^8.2.1",
@@ -30,8 +31,26 @@
     "@types/howler": "^2.2.7",
     "@types/nprogress": "^0.2.0",
     "@vitejs/plugin-vue": "^2.3.1",
+    "husky": "^8.0.1",
+    "postcss": "^8.4.18",
+    "postcss-html": "^1.5.0",
+    "postcss-scss": "^4.0.5",
+    "prettier": "^2.7.1",
+    "stylelint": "^14.14.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-recommended-scss": "^8.0.0",
+    "stylelint-config-recommended-vue": "^1.4.0",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-config-standard-scss": "^6.0.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.3.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.5",
     "vue-tsc": "^0.34.7"
+  },
+  "resolutions": {
+    "postcss": "^8.4.18"
   }
 }

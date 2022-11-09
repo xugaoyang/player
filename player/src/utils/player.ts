@@ -49,6 +49,12 @@ export default class {
       },
       onplay: () => {
         console.log('play')
+        setInterval(() => {
+          // 当前进度时间
+          this.currentTime = this._howler.seek()
+          // 当前进度位置，进度条所占百分比
+          this.currentPos = (this._howler.seek()/this._howler.duration()) * 100
+        }, 1000)
       },
       onpause: () => {},
       onstop: () => {},

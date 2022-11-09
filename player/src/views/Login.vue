@@ -59,13 +59,13 @@ const onFinish = async () => {
 .login-bg {
   .login-container {
     position: absolute;
-    right: 10%;
     top: 50%;
-    transform: translateY(-50%);
+    right: 10%;
     width: 300px;
     height: 300px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgb(255 255 255 / 50%);
     border-radius: 5px;
+    transform: translateY(-50%);
   }
 }
 </style>
