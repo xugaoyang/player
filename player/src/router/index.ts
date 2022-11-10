@@ -21,6 +21,12 @@ const routes = [
     component: () => import('@/views/Demo.vue')
   },
   {
+    path: '/windi',
+    name: 'windi',
+    meta: {title: 'windi'},
+    component: () => import('@/views/Windi.vue')
+  },
+  {
     path: '/main',
     component: Layout,
     children: [
