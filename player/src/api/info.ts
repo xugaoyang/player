@@ -30,15 +30,15 @@ export function getLyric(id: string) {
 
 /**
  * 获取歌曲详情
- * @param id 
+ * @param ids
  * @returns 
  */
-export function getSongDetail(id: string) {
+export function getSongDetail(ids: string) {
   return request({
     url: '/song/detail',
     method: 'get',
     params: {
-      id,
+      ids,
     },
   })
 }

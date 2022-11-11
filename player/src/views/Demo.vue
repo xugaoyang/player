@@ -323,27 +323,33 @@ onMounted(() => {})
 <style lang="scss" scoped>
 :deep(.anticon) {
   font-size: 20px;
+
   &.icon-lyric {
     font-size: 18px;
     font-weight: bold;
   }
 }
+
 .control-bar {
   position: relative;
+
   .control-bar-r {
     position: absolute;
-    right: 20px;
     top: 0;
+    right: 20px;
   }
 }
+
 .lyric-panel {
-  height: 400px;
   overflow: hidden;
+  height: 400px;
   // overflow-y: scroll;
   .lyric {
   }
+
   .lyric-text {
     color: #666;
+
     &.highlight {
       color: lightcoral;
     }
@@ -355,6 +361,7 @@ onMounted(() => {})
 .ant-popover-inner-content {
   padding: 5px !important;
 }
+
 .ant-slider-vertical {
   margin: 0 !important;
 }

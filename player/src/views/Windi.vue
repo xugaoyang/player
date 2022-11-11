@@ -1,12 +1,11 @@
 <script setup lang="ts">
 const changeDark = () => {
   const htmlDom = document.querySelector('html')
-  const classList = htmlDom.getAttribute('class')
-  console.log(classList)
-  if (classList.indexOf('dark') === -1) {
-    htmlDom.setAttribute('class', `${classList} dark`)
+  const htmlClassList = htmlDom.getAttribute('class')
+  if (htmlClassList.indexOf('dark') === -1) {
+    htmlDom.setAttribute('class', `${htmlClassList} dark`)
   } else {
-    htmlDom.setAttribute('class', classList.replace(' dark', ''))
+    htmlDom.setAttribute('class', htmlClassList.replace(' dark', ''))
   }
 }
 
@@ -22,6 +21,7 @@ const changeDark = () => {
   >
     Button
   </button>
+  <div class="py-20px"></div>
   <button class="btn btn-green" @click="changeDark">切换深色模式</button>
 </template>
 

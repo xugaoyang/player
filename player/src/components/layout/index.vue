@@ -16,8 +16,8 @@ import ControlBtns from './ControlBtns.vue'
 
 <style lang="scss" scoped>
   .container-page {
-    height: calc(100vh - 100px);
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
+    height: calc(100vh - 100px);
   }
 </style>

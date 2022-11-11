@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import { EffectCoverflow, Autoplay } from 'swiper'
-import { useMainStore } from '@/store'
+import { usePlayerStore } from '@/store/player'
 
 interface Banner {
   imageUrl: string
@@ -15,7 +15,7 @@ interface Banner {
   typeTitle: string
 }
 
-const store = useMainStore()
+const playerStore = usePlayerStore()
 const banners = ref<Banner[] | null>(null)
 const hqList = reactive({
   name: '精品歌单',
@@ -57,9 +57,12 @@ const onSlideChange = () => {}
  */
 const songPlay = async (song: any) => {
   const data = toRaw(song)
+  console.log(data)
   const res = await getSongUrlById(data.id)
-  store.player.playAudioSource(res)
+  playerStore.player.playAudioSource(res)
   // TODO:添加进当前播放列表
+
+  playerStore.addToList(data)
 }
 
 /**
@@ -129,7 +132,7 @@ const getSongUrlById = async (id: string) => {
     <div>
       <h4 class="text-lg mb-4 mt-4 font-bold">
         {{ hqList.name
-        }}<span class="float-right flex items-center font-normal" click="getMore('hq')">more<swap-right-outlined /></span>
+        }}<span class="float-right flex items-center font-normal " click="getMore('hq')">more<swap-right-outlined /></span>
       </h4>
       <a-list
         :data-source="hqList.list"
@@ -172,39 +175,46 @@ const getSongUrlById = async (id: string) => {
   align-items: center;
   flex: none;
   width: 100%;
+
   .ant-avatar {
     width: 100px;
     height: 100px;
     border-radius: 10px;
   }
+
   .ant-list-item-meta-content {
     width: 60%;
   }
+
   .ant-list-item-meta-avatar {
     position: relative;
   }
+
   .icon-play {
     position: absolute;
-    left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    left: 50%;
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgb(255 255 255 / 80%);
+    transform: translate(-50%, -50%);
   }
 }
-.cover-img {
-  width: 100%;
-  min-height: auto; 
+
+.cover-img { 
   margin-bottom: 10px;
+  width: 100%;
+  min-height: auto;
   border-radius: 10px;
 }
 
 :deep(.ant-card-meta-title) {
   text-align: left;
 }
+
 :deep(.swiper) {
   margin: 20px 0;
   border-radius: 10px;
+
   img {
     border-radius: 10px;
   }
