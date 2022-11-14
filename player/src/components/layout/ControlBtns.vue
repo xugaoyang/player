@@ -32,30 +32,24 @@ const getSongUrlById = async (id: string) => {
   return ''
 }
 
-// 播放、暂停、下一首、上一首
-const play = () => {
-  
-}
-
 const toPrev = async () => {
-  playerStore.toPrevSong()
+  await playerStore.toPrevSong()
   console.log(toRaw(currentSong), toRaw(currentSong.value))
   const res = await getSongUrlById(toRaw(currentSong.value).id)
-  console.log(res)
   playerStore.player.playAudioSource(res)
 }
 
 const toNext = async () => {
-  playerStore.toNextSong()
+  await playerStore.toNextSong()
   const res = await getSongUrlById(toRaw(currentSong.value).id)
   playerStore.player.playAudioSource(res)
 }
 
 const pauseOrPlay = () => {
-  if (sound.playing()) {
-    sound.pause()
+  if (playerStore.player.isPlaying) {
+    playerStore.player.pause()
   } else {
-    sound.play()
+    playerStore.player.play()
   }
 }
 // change volume
@@ -112,12 +106,12 @@ const secToMin = (second: number) => {
     <div class="player-control">
       <div class="player-control-btns flex justify-around items-center">
         <StepBackwardOutlined :style="iconFontSize" @click="toPrev"/>
-        <span> <PauseOutlined v-if="isPlaying" :style="iconFontSize" /><CaretRightOutlined  :style="iconFontSize" v-else /></span>
+        <span> <PauseOutlined v-if="player.isPlaying" :style="iconFontSize" @click="pauseOrPlay()" /><CaretRightOutlined  :style="iconFontSize" v-else @click="pauseOrPlay()" /></span>
         <StepForwardOutlined :style="iconFontSize" @click="toNext" />
       </div>
       <div class="player-control-slider flex justify-around items-center">
-        <span class="pr-5px">{{secToMin(player.currentTime)}}</span>
-        <a-progress :percent="player.currentPos" :stroke-color="strokeColor" :showInfo="false" />
+        <span class="pr-5px">{{secToMin(playerStore.player.currentTime)}}</span>
+        <a-progress :percent="playerStore.player.currentPos" :stroke-color="strokeColor" :showInfo="false" />
         <span class="pl-5px">{{secToMin(currentSong.dt/1000)}}</span>
       </div>
     </div>

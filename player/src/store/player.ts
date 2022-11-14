@@ -60,17 +60,19 @@ export const usePlayerStore = defineStore('playerStore', {
     replaceList(data: any) {
       this.list = data
     },
-    toPrevSong() {
+    async toPrevSong() {
       const currentIndex =
         this.currentIndex - 1 < 0 ? this.list.length - 1 : this.currentIndex - 1
       this.currentIndex = currentIndex
-      this.currentSong = this.list[this.currentIndex]
+      const currentSongInfo = await getSongDetail(this.list[this.currentIndex].id)
+      this.currentSong = currentSongInfo.songs[0]
     },
-    toNextSong() {
+    async toNextSong() {
       const currentIndex =
         this.currentIndex + 1 === this.list.length ? 0 : this.currentIndex + 1
       this.currentIndex = currentIndex
-      this.currentSong = this.list[this.currentIndex]
+      const currentSongInfo = await getSongDetail(this.list[this.currentIndex].id)
+      this.currentSong = currentSongInfo.songs[0]
     }
   }
 })
