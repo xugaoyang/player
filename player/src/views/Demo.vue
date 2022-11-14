@@ -194,7 +194,7 @@ const pauseOrPlay = () => {
 // change volume
 const changeVolume = (val: number) => {
   player.volume = val
-  sound.volume(player.volume)
+  
 }
 
 // mute

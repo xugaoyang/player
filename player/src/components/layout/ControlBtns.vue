@@ -10,7 +10,7 @@ import {
   MenuUnfoldOutlined
 } from '@ant-design/icons-vue'
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js'
 })
 import { getSongUrl } from '@/api/info'
 import { usePlayerStore } from '@/store/player'
@@ -55,16 +55,16 @@ const pauseOrPlay = () => {
     playerStore.player.play()
   }
 }
-// change volume
-const changeVolume = (val: number) => {
-  player.volume = val
-  sound.volume(player.volume)
-}
 
 // mute
 const changeMute = () => {
   player.mute = !player.mute
   sound.mute(player.mute)
+}
+
+const changeVolume = (val: number) => {
+  player.volume = val
+  playerStore.player.SET_VOLUME()
 }
 
 const showLyric = () => {
@@ -113,7 +113,10 @@ const secToMin = (second: number) => {
           <template #title>关闭循环</template>
           <icon-font type="icon-close-circle" @click="player.changeLoop()" />
         </a-tooltip>
-        <StepBackwardOutlined :style="iconFontSize" @click="player.toPrevSong()" />
+        <StepBackwardOutlined
+          :style="iconFontSize"
+          @click="player.toPrevSong()"
+        />
         <span>
           <PauseOutlined
             v-if="player.isPlaying"
@@ -123,7 +126,10 @@ const secToMin = (second: number) => {
             v-else
             @click="pauseOrPlay()"
         /></span>
-        <StepForwardOutlined :style="iconFontSize" @click="player.toNextSong()" />
+        <StepForwardOutlined
+          :style="iconFontSize"
+          @click="player.toNextSong()"
+        />
 
         <icon-font class="icon-lyric pl-5px" type="icon-lyric" />
       </div>
@@ -140,6 +146,23 @@ const secToMin = (second: number) => {
       </div>
     </div>
     <div class="other-control text-right">
+      <a-popover>
+        <template #content>
+          <div class="h-50px">
+            <a-slider
+              v-model:value="player.volume"
+              :min="0"
+              :max="1"
+              :step="0.1"
+              @change="changeVolume"
+              :tooltip-visible="false"
+              vertical
+            />
+          </div>
+        </template>
+        <icon-font v-if="player.volume === 0" type="icon-sound-mute" class="pr-5px" :style="iconFontSize" />
+        <icon-font v-else type="icon-sound-filling" class="pr-5px" :style="iconFontSize" />
+      </a-popover>
       <MenuUnfoldOutlined :style="iconFontSize" />
     </div>
   </div>

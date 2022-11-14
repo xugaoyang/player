@@ -166,4 +166,9 @@ export default class {
     const idx = loopArr.findIndex((item) => item === this.loopMode)
     this.loopMode = idx + 1 === loopArr.length ? loopArr[0] : loopArr[idx + 1]
   }
+  // 音量调整
+  SET_VOLUME() {
+    console.log('set_volume')
+    this._howler.volume(this.volume)
+  }
 }
