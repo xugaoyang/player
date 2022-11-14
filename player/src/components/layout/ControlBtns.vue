@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { ref, reactive, toRaw} from 'vue'
-import {storeToRefs} from 'pinia'
+import { ref, reactive, toRaw } from 'vue'
+import { storeToRefs } from 'pinia'
 import {
+  createFromIconfontCN,
   PauseOutlined,
   StepBackwardOutlined,
   StepForwardOutlined,
   CaretRightOutlined,
   MenuUnfoldOutlined
 } from '@ant-design/icons-vue'
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js',
+})
 import { getSongUrl } from '@/api/info'
 import { usePlayerStore } from '@/store/player'
 
 const playerStore = usePlayerStore()
-const {player, currentSong, currentIndex, list} = storeToRefs(playerStore)
-
+const { player, currentSong, currentIndex, list } = storeToRefs(playerStore)
 
 console.log(currentSong, currentIndex, player)
 const progress = ref(30)
@@ -64,12 +67,6 @@ const changeMute = () => {
   sound.mute(player.mute)
 }
 
-const changeLoop = () => {
-  const loopArr = ['single', 'list', 'off']
-  const idx = loopArr.findIndex((item) => item === player.loopMode)
-  player.loopMode = idx + 1 === loopArr.length ? loopArr[0] : loopArr[idx + 1]
-}
-
 const showLyric = () => {
   console.log('show me lyric')
   player.isLyricShow = !player.isLyricShow
@@ -89,30 +86,57 @@ const secToMin = (second: number) => {
 }
 
 // 播放列表展示
-
 </script>
 
 <template>
   <div class="footer bg-white flex justify-between items-center">
     <div class="song-info flex">
       <div class="song-cover mr-5px">
-        <img :src="currentSong.al.picUrl" />
+        <img :src="player.currentSong.al.picUrl" />
       </div>
       <div>
-        <div class="song">{{currentSong.name}}</div>
-        <div class="singer">{{currentSong.ar[0].name}}</div>
+        <div class="song">{{ player.currentSong.name }}</div>
+        <div class="singer">{{ player.currentSong.ar[0].name }}</div>
       </div>
     </div>
     <div class="player-control">
       <div class="player-control-btns flex justify-around items-center">
-        <StepBackwardOutlined :style="iconFontSize" @click="toPrev"/>
-        <span> <PauseOutlined v-if="player.isPlaying" :style="iconFontSize" @click="pauseOrPlay()" /><CaretRightOutlined  :style="iconFontSize" v-else @click="pauseOrPlay()" /></span>
-        <StepForwardOutlined :style="iconFontSize" @click="toNext" />
+        <a-tooltip v-if="player.loopMode === 'single'" class="pr-5px">
+          <template #title>单曲循环</template>
+          <icon-font type="icon-single-circle" @click="player.changeLoop()" />
+        </a-tooltip>
+        <a-tooltip v-else-if="player.loopMode === 'list'" class="pr-5px">
+          <template #title>列表循环</template>
+          <icon-font type="icon-list-circle" @click="player.changeLoop()" />
+        </a-tooltip>
+        <a-tooltip v-else class="pr-5px">
+          <template #title>关闭循环</template>
+          <icon-font type="icon-close-circle" @click="player.changeLoop()" />
+        </a-tooltip>
+        <StepBackwardOutlined :style="iconFontSize" @click="player.toPrevSong()" />
+        <span>
+          <PauseOutlined
+            v-if="player.isPlaying"
+            :style="iconFontSize"
+            @click="pauseOrPlay()" /><CaretRightOutlined
+            :style="iconFontSize"
+            v-else
+            @click="pauseOrPlay()"
+        /></span>
+        <StepForwardOutlined :style="iconFontSize" @click="player.toNextSong()" />
+
+        <icon-font class="icon-lyric pl-5px" type="icon-lyric" />
       </div>
       <div class="player-control-slider flex justify-around items-center">
-        <span class="pr-5px">{{secToMin(playerStore.player.currentTime)}}</span>
-        <a-progress :percent="playerStore.player.currentPos" :stroke-color="strokeColor" :showInfo="false" />
-        <span class="pl-5px">{{secToMin(currentSong.dt/1000)}}</span>
+        <span class="pr-5px">{{
+          secToMin(playerStore.player.currentTime)
+        }}</span>
+        <a-progress
+          :percent="playerStore.player.currentPos"
+          :stroke-color="strokeColor"
+          :showInfo="false"
+        />
+        <span class="pl-5px">{{ secToMin(player.currentSong.dt / 1000) }}</span>
       </div>
     </div>
     <div class="other-control text-right">
@@ -122,6 +146,15 @@ const secToMin = (second: number) => {
 </template>
 
 <style lang="scss" scoped>
+:deep(.anticon) {
+  font-size: 20px;
+
+  &.icon-lyric {
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+
 .footer {
   padding: 0 50px;
   height: 50px;

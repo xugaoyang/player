@@ -62,7 +62,7 @@ const songPlay = async (song: any) => {
   playerStore.player.playAudioSource(res)
   // TODO:添加进当前播放列表
 
-  playerStore.addToList(data)
+  playerStore.player.addToList(data)
 }
 
 /**
