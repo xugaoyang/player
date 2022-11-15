@@ -7,6 +7,7 @@ export default class {
   isPlaying: boolean;
   loopMode: string;
   volume: number;
+  volumeBeforeMute: number;
   mute: boolean;
   list: never[];
   currentIndex: number;
@@ -22,6 +23,7 @@ export default class {
     this.progress = 0 // 当前播放歌曲的进度
     this.loopMode = 'off' // 单曲:single，关闭循环:off，列表:list
     this.volume = 1 // 0 to 1
+    this.volumeBeforeMute = 1
     this.mute = false // 是否静音
 
     // 播放信息
@@ -52,6 +54,25 @@ export default class {
   }
   SET_PLAYING(val: boolean) {
     this.isPlaying = val
+  }
+  get GET_MUTE() {
+    return this.mute
+  }
+  // 音量调整
+  SET_VOLUME() {
+    console.log('set_volume')
+    this._howler.volume(this.volume)
+  }
+  // 静音
+  SET_MUTE() {
+    console.log('set_mute',this.mute)
+    if (this.mute) {
+      this.volumeBeforeMute = this.volume
+      this.volume = 0
+    } else {
+      this.volume = this.volumeBeforeMute
+    }
+    this._howler.mute(this.mute)
   }
   init() {
     Howler.volume(this.volume)
@@ -143,14 +164,13 @@ export default class {
 
   // 播放完成后的处理逻辑
   callbackAfterFinish() {
-    console.log(this.loopMode, '1')
     // 列表循环，自动播放下一首
     if (this.loopMode === 'list') {
       this.toNextSong()
     }
     // 单曲循环
     if (this.loopMode === 'single') {
-      getSongUrl(this.currentSong.id).then((res) => {
+      getSongUrl(this.currentSong.id).then((res:any) => {
         if (res.code === 200) {
           this.playAudioSource(res.data[0].url)
         }
@@ -166,9 +186,5 @@ export default class {
     const idx = loopArr.findIndex((item) => item === this.loopMode)
     this.loopMode = idx + 1 === loopArr.length ? loopArr[0] : loopArr[idx + 1]
   }
-  // 音量调整
-  SET_VOLUME() {
-    console.log('set_volume')
-    this._howler.volume(this.volume)
-  }
+  
 }

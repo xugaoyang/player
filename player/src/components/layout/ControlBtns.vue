@@ -19,34 +19,11 @@ const playerStore = usePlayerStore()
 const { player, currentSong, currentIndex, list } = storeToRefs(playerStore)
 
 console.log(currentSong, currentIndex, player)
-const progress = ref(30)
-const strokeColor = ref('#000')
-const isPlaying = ref(false)
 
+const strokeColor = ref('#000')
 const iconFontSize = reactive({
   fontSize: '26px'
 })
-
-const getSongUrlById = async (id: string) => {
-  const res = await getSongUrl(id)
-  if (res.code === 200) {
-    return res.data[0].url
-  }
-  return ''
-}
-
-const toPrev = async () => {
-  await playerStore.toPrevSong()
-  console.log(toRaw(currentSong), toRaw(currentSong.value))
-  const res = await getSongUrlById(toRaw(currentSong.value).id)
-  playerStore.player.playAudioSource(res)
-}
-
-const toNext = async () => {
-  await playerStore.toNextSong()
-  const res = await getSongUrlById(toRaw(currentSong.value).id)
-  playerStore.player.playAudioSource(res)
-}
 
 const pauseOrPlay = () => {
   if (playerStore.player.isPlaying) {
@@ -58,8 +35,9 @@ const pauseOrPlay = () => {
 
 // mute
 const changeMute = () => {
-  player.mute = !player.mute
-  sound.mute(player.mute)
+  console.log('mute', playerStore.player.mute)
+  playerStore.player.mute = !playerStore.player.mute
+  playerStore.player.SET_MUTE()
 }
 
 const changeVolume = (val: number) => {
@@ -160,8 +138,8 @@ const secToMin = (second: number) => {
             />
           </div>
         </template>
-        <icon-font v-if="player.volume === 0" type="icon-sound-mute" class="pr-5px" :style="iconFontSize" />
-        <icon-font v-else type="icon-sound-filling" class="pr-5px" :style="iconFontSize" />
+        <icon-font v-if="player.volume === 0" type="icon-sound-mute" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
+        <icon-font v-else type="icon-sound-filling" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
       </a-popover>
       <MenuUnfoldOutlined :style="iconFontSize" />
     </div>
