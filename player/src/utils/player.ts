@@ -146,7 +146,7 @@ export default class {
     console.log(this.loopMode, '1')
     // 列表循环，自动播放下一首
     if (this.loopMode === 'list') {
-      // toNext()
+      this.toNextSong()
     }
     // 单曲循环
     if (this.loopMode === 'single') {

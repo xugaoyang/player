@@ -95,8 +95,8 @@ const secToMin = (second: number) => {
         <img :src="player.currentSong.al.picUrl" />
       </div>
       <div>
-        <div class="song">{{ player.currentSong.name }}</div>
-        <div class="singer">{{ player.currentSong.ar[0].name }}</div>
+        <div class="song font-bold">{{ player.currentSong.name || '--'}}</div>
+        <div class="singer font-bold text-12px">{{ player.currentSong.ar[0].name || '--'}}</div>
       </div>
     </div>
     <div class="player-control">
@@ -134,7 +134,7 @@ const secToMin = (second: number) => {
         <icon-font class="icon-lyric pl-5px" type="icon-lyric" />
       </div>
       <div class="player-control-slider flex justify-around items-center">
-        <span class="pr-5px">{{
+        <span class="pr-5px font-bold">{{
           secToMin(playerStore.player.currentTime)
         }}</span>
         <a-progress
@@ -142,7 +142,7 @@ const secToMin = (second: number) => {
           :stroke-color="strokeColor"
           :showInfo="false"
         />
-        <span class="pl-5px">{{ secToMin(player.currentSong.dt / 1000) }}</span>
+        <span class="pl-5px font-bold">{{ secToMin(player.currentSong.dt / 1000) }}</span>
       </div>
     </div>
     <div class="other-control text-right">
@@ -181,6 +181,10 @@ const secToMin = (second: number) => {
 .footer {
   padding: 0 50px;
   height: 50px;
+
+  .song-info {
+    max-width: 150px;
+  }
 
   .song-cover {
     width: 40px;
