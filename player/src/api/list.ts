@@ -10,8 +10,8 @@ export function getBanner(type: number) {
     url: '/banner',
     method: 'get',
     params: {
-      type,
-    },
+      type
+    }
   })
 }
 
@@ -22,7 +22,7 @@ export function getBanner(type: number) {
 export function getCatList() {
   return request({
     url: '/playlist/catlist',
-    method: 'get',
+    method: 'get'
   })
 }
 
@@ -33,7 +33,7 @@ export function getCatList() {
 export function getHotList() {
   return request({
     url: '/playlist/catlist',
-    method: 'get',
+    method: 'get'
   })
 }
 
@@ -44,9 +44,38 @@ export function getHotList() {
 export function getHqList() {
   return request({
     url: '/top/playlist/highquality',
-    method: 'get',
+    method: 'get'
   })
 }
+
+/**
+ * 获取歌单详情
+ * @param {string} id 歌单id
+ */
+export function getHqDetail(id: string) {
+  return request({
+    url: '/playlist/detail',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+
+/**
+ * 获取歌单列表
+ * @param {string} id 歌单id
+ */
+export function getHqSongs(id: string) {
+  return request({
+    url: '/playlist/track/all',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+
 /**
  * 新歌速递
  * @param {number} type 全部：0 华语：7 欧美：96 韩国：16
@@ -57,8 +86,8 @@ export function getNewList(type: number) {
     url: '/top/song',
     method: 'get',
     params: {
-      type,
-    },
+      type
+    }
   })
 }
 
@@ -74,15 +103,15 @@ export function getSingerList(type: number, area: number) {
     method: 'get',
     params: {
       type,
-      area,
-    },
+      area
+    }
   })
 }
 
 /**
  * 获取歌手热门50首歌曲
  * @param {string} id 歌手id
- * @returns 
+ * @returns
  */
 export function getSingerTop50(id: string) {
   return request({
@@ -90,14 +119,14 @@ export function getSingerTop50(id: string) {
     method: 'get',
     params: {
       id
-    },
+    }
   })
 }
 
 /**
  * 歌手全部歌曲
  * @param {string} id 歌手id
- * @returns 
+ * @returns
  */
 export function getSingerAll(id: string) {
   return request({
@@ -105,6 +134,6 @@ export function getSingerAll(id: string) {
     method: 'get',
     params: {
       id
-    },
+    }
   })
 }

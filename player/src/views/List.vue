@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, toRaw} from 'vue'
-import { getHqList, getNewList, getSingerList, getBanner } from '@/api/list'
+import { getHqList,getHqDetail, getHqSongs, getNewList, getSingerList, getBanner } from '@/api/list'
 import { getSongUrl } from '@/api/info'
 import { PlayCircleOutlined, SwapRightOutlined } from '@ant-design/icons-vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -68,7 +68,18 @@ const songPlay = async (song: any) => {
 /**
  * 打开精选歌单
  */
-const openAlbum = () => {}
+const openAlbum = async (id) => {
+  const detailRes = await getHqDetail(id)
+  console.log(detailRes)
+  if (detailRes.code === 200) {
+    // TODO:去歌单详情页
+  }
+  const listRes = await getHqSongs(id)
+  console.log(listRes)
+  if (listRes.code === 200) {
+    playerStore.player.list = listRes.songs
+  }
+}
 
 /**
  * 打开歌手热门歌曲50
@@ -139,7 +150,7 @@ const getSongUrlById = async (id: string) => {
         :grid="{ gutter: 200, xs: 2, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4, xxxl: 4 }"
       >
         <template #renderItem="{ item }">
-          <a-list-item @click="openAlbum">
+          <a-list-item @click="openAlbum(item.id)">
             <a-card :bordered="false" :body-style="{ width: '100%', padding: 0 }">
               <template #cover>
                 <img class="cover-img" :src="item.coverImgUrl" alt="" />
