@@ -136,7 +136,15 @@ export default class {
     const currentSongInfo = await getSongDetail(data.id)
     this.currentSong = currentSongInfo.songs[0]
   }
-
+  async listItemPlay(index: number) {
+    this.currentIndex = index
+    const currentSongInfo = await getSongDetail(this.list[this.currentIndex].id)
+    this.currentSong = currentSongInfo.songs[0]
+    const res = await getSongUrl(this.currentSong.id)
+    if (res.code === 200) {
+      this.playAudioSource(res.data[0].url)
+    }
+  }
   // 上一首
   async toPrevSong() {
     const currentIndex =

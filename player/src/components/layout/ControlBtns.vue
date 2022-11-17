@@ -14,6 +14,7 @@ const IconFont = createFromIconfontCN({
 })
 import { getSongUrl } from '@/api/info'
 import { usePlayerStore } from '@/store/player'
+import Songs from './Songs.vue'
 
 const playerStore = usePlayerStore()
 const { player, currentSong, currentIndex, list } = storeToRefs(playerStore)
@@ -21,6 +22,7 @@ const { player, currentSong, currentIndex, list } = storeToRefs(playerStore)
 console.log(currentSong, currentIndex, player)
 
 const strokeColor = ref('#000')
+const showSongsStatus = ref(false)
 const iconFontSize = reactive({
   fontSize: '26px'
 })
@@ -63,11 +65,15 @@ const secToMin = (second: number) => {
   return `${m}:${s}`
 }
 
+const showSongsPanel = () => {
+  showSongsStatus = !showSongsStatus
+}
+
 // 播放列表展示
 </script>
 
 <template>
-  <div class="footer bg-white flex justify-between items-center">
+  <div class="footer bg-white flex justify-between items-center relative">
     <div class="song-info flex">
       <div class="song-cover mr-5px">
         <img :src="player.currentSong.al.picUrl" />
@@ -141,7 +147,10 @@ const secToMin = (second: number) => {
         <icon-font v-if="player.volume === 0" type="icon-sound-mute" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
         <icon-font v-else type="icon-sound-filling" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
       </a-popover>
-      <MenuUnfoldOutlined :style="iconFontSize" />
+      <MenuUnfoldOutlined :style="iconFontSize" @click="showSongsStatus = !showSongsStatus" />
+    </div>
+    <div class="play-list absolute right-0 bg-white" v-if="showSongsStatus">
+      <Songs></Songs>
     </div>
   </div>
 </template>
@@ -183,5 +192,12 @@ const secToMin = (second: number) => {
   .other-control {
     width: 100px;
   }
+}
+
+.play-list {
+  top: -600px;
+  overflow-y: auto;
+  width: 200px;
+  height: 600px;
 }
 </style>
