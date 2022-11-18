@@ -16,7 +16,7 @@ const playerStore = usePlayerStore()
     >
       <template #renderItem="{ item, index }">
         <a-list-item @click="playerStore.player.listItemPlay(index)" class="cursor-pointer" :class="{active: playerStore.player.currentIndex === index}">
-          <a-list-item-meta :description="item.ar[0].name">
+          <a-list-item-meta :description="item.hasOwnProperty('ar') && item.ar[0].name || item.hasOwnProperty('artists') && item.artists[0].name">
             <template #title>{{ item.name }}</template>
           </a-list-item-meta>
         </a-list-item>
