@@ -79,8 +79,10 @@ const showSongsPanel = () => {
         <img :src="player.currentSong.al.picUrl" />
       </div>
       <div>
-        <div class="song font-bold">{{ player.currentSong.name || '--'}}</div>
-        <div class="singer font-bold text-12px">{{ player.currentSong.ar[0].name || '--'}}</div>
+        <div class="song font-bold">{{ player.currentSong.name || '--' }}</div>
+        <div class="singer font-bold text-12px">
+          {{ player.currentSong.ar[0].name || '--' }}
+        </div>
       </div>
     </div>
     <div class="player-control">
@@ -126,7 +128,9 @@ const showSongsPanel = () => {
           :stroke-color="strokeColor"
           :showInfo="false"
         />
-        <span class="pl-5px font-bold">{{ secToMin(player.currentSong.dt / 1000) }}</span>
+        <span class="pl-5px font-bold">{{
+          secToMin(player.currentSong.dt / 1000)
+        }}</span>
       </div>
     </div>
     <div class="other-control text-right">
@@ -144,14 +148,28 @@ const showSongsPanel = () => {
             />
           </div>
         </template>
-        <icon-font v-if="player.volume === 0" type="icon-sound-mute" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
-        <icon-font v-else type="icon-sound-filling" class="pr-5px" :style="iconFontSize" @click="changeMute()" />
+        <icon-font
+          v-if="player.volume === 0"
+          type="icon-sound-mute"
+          class="pr-5px"
+          :style="iconFontSize"
+          @click="changeMute()"
+        />
+        <icon-font
+          v-else
+          type="icon-sound-filling"
+          class="pr-5px"
+          :style="iconFontSize"
+          @click="changeMute()"
+        />
       </a-popover>
-      <MenuUnfoldOutlined :style="iconFontSize" @click="showSongsStatus = !showSongsStatus" />
+      <MenuUnfoldOutlined
+        :style="iconFontSize"
+        @click="showSongsStatus = !showSongsStatus"
+      />
     </div>
-    <div class="play-list absolute right-0 bg-white" v-if="showSongsStatus">
-      <Songs></Songs>
-    </div>
+
+    <Songs v-if="showSongsStatus"></Songs>
   </div>
 </template>
 
@@ -170,7 +188,7 @@ const showSongsPanel = () => {
   height: 50px;
 
   .song-info {
-    max-width: 150px;
+    max-width: 200px;
   }
 
   .song-cover {
@@ -194,10 +212,5 @@ const showSongsPanel = () => {
   }
 }
 
-.play-list {
-  top: -600px;
-  overflow-y: auto;
-  width: 200px;
-  height: 600px;
-}
+
 </style>
