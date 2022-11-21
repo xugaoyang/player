@@ -78,8 +78,8 @@ const showSongsPanel = () => {
       <div class="song-cover mr-5px">
         <img :src="player.currentSong.al.picUrl" />
       </div>
-      <div>
-        <div class="song font-bold">{{ player.currentSong.name || '--' }}</div>
+      <div class="w-150px">
+        <div class="song font-bold w-full truncate">{{ player.currentSong.name || '--' }}</div>
         <div class="singer font-bold text-12px">
           {{ player.currentSong.ar[0].name || '--' }}
         </div>
@@ -186,19 +186,21 @@ const showSongsPanel = () => {
 .footer {
   padding: 0 50px;
   height: 50px;
+  box-shadow: -2px -2px 2px rgb(0 0 0 / 20%);
 
   .song-info {
+    width: 200px;
     max-width: 200px;
   }
 
   .song-cover {
     width: 40px;
     height: 40px;
-    border-radius: 4px;
+    border-radius: 5px;
 
     img {
-      width: 100%;
-      height: 100%;
+      width: 40px;
+      height: 40px;
       border-radius: 5px;
     }
   }
