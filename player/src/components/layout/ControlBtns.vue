@@ -65,9 +65,6 @@ const secToMin = (second: number) => {
   return `${m}:${s}`
 }
 
-const showSongsPanel = () => {
-  showSongsStatus = !showSongsStatus
-}
 
 // 播放列表展示
 </script>
