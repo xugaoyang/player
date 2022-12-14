@@ -26,10 +26,10 @@ console.log(account)
         <template #overlay>
           <a-menu>
             <a-menu-item key="0">
-              <a href="">个人中心</a>
+              <span class="block" @click="push('/main/user')">个人中心</span>
             </a-menu-item>
             <a-menu-item key="1">
-              <a href="">退出</a>
+              <span class="block" @click="push('/login')">退出</span>
             </a-menu-item>
           </a-menu>
         </template>
