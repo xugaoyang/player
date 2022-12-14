@@ -51,6 +51,11 @@ onMounted(async () => {
 
 const onSwiper = () => {}
 
+const swiperClick = (data) => {
+  console.log(toRaw(data))
+}
+
+
 const onSlideChange = () => {}
 /**
  * 播放热门歌曲
@@ -106,7 +111,7 @@ const getSongUrlById = async (id: string) => {
 </script>
 
 <template>
-  <div style="padding: 0 50px">
+  <div class="px-50px">
     <swiper
       :grabCursor="true"
       :effect="'coverflow'"
@@ -118,7 +123,7 @@ const getSongUrlById = async (id: string) => {
       @swiper="onSwiper"
       @slideChange="onSlideChange"
     >
-      <swiper-slide v-for="banner in banners" :key="banner.targetId"
+      <swiper-slide v-for="banner in banners" :key="banner.targetId" @click="swiperClick(banner)"
         ><img :src="banner.imageUrl" :alt="banner.typeTitle"
       /></swiper-slide>
     </swiper>

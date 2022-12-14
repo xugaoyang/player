@@ -10,7 +10,7 @@ import {
   MenuUnfoldOutlined
 } from '@ant-design/icons-vue'
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3583965_416phhby9e7.js'
+  scriptUrl: '//at.alicdn.com/t/c/font_3583965_sufozqssd4o.js'
 })
 import { getSongUrl } from '@/api/info'
 import { usePlayerStore } from '@/store/player'
