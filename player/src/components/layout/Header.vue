@@ -1,24 +1,28 @@
 <script setup lang="ts">
-  // import {reactive} from 'vue'
-  import { useMainStore } from '@/store'
-  import { useRouter } from 'vue-router'
+// import {reactive} from 'vue'
+import { useMainStore } from '@/store'
+import { useRouter } from 'vue-router'
 
-  const store = useMainStore()
-  const {push} = useRouter()
-  const userProfile = store.getProfile
-  console.log(userProfile)
-  const account = store.getAccount
-  console.log(account)
-
-  
+const store = useMainStore()
+const { push } = useRouter()
+const userProfile = store.getProfile
+console.log(userProfile)
+const account = store.getAccount
+console.log(account)
 </script>
 
 <template>
   <div class="header bg-white flex justify-between items-center header-shadow">
-    <div class="cursor-pointer" @click="push('/')"><img class="logo" src="../../assets/Y.png" alt=""></div>
+    <div class="cursor-pointer" @click="push('/')">
+      <img class="logo" src="../../assets/Y.png" alt="" />
+    </div>
     <div>
       <a-dropdown>
-        <a @click.prevent class="flex items-center font-bold text-black"><img class="avatar" :src="userProfile.avatarUrl">{{userProfile.nickname}}</a>
+        <a @click.prevent class="flex items-center font-bold text-black"
+          ><img class="avatar" :src="userProfile.avatarUrl" />{{
+            userProfile.nickname
+          }}</a
+        >
         <template #overlay>
           <a-menu>
             <a-menu-item key="0">
@@ -29,7 +33,7 @@
             </a-menu-item>
           </a-menu>
         </template>
-      </a-dropdown>      
+      </a-dropdown>
     </div>
   </div>
 </template>
